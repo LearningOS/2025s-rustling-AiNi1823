@@ -3,7 +3,7 @@
 	This problem requires you to implement a basic interface for a binary tree
 */
 
-//I AM NOT DONE
+
 use std::cmp::Ordering;
 use std::fmt::Debug;
 
@@ -43,20 +43,52 @@ impl<T> BinarySearchTree<T>
 where
     T: Ord,
 {
-
     fn new() -> Self {
         BinarySearchTree { root: None }
     }
 
     // Insert a value into the BST
     fn insert(&mut self, value: T) {
-        //TODO
+        if self.root.is_none() {
+            let new_node = Box::new(TreeNode::<T>::new(value));
+            self.root = Some(new_node);
+            return;
+        }
+
+        let mut parent = &mut self.root;
+
+        while (value < parent.as_ref().unwrap().value && parent.as_ref().unwrap().left.is_some())
+            || (value > parent.as_ref().unwrap().value && parent.as_ref().unwrap().right.is_some())
+        {
+            if value < parent.as_ref().unwrap().value {
+                parent = &mut parent.as_mut().unwrap().left;
+            } else {
+                parent = &mut parent.as_mut().unwrap().right;
+            }
+        }
+
+        if value != parent.as_ref().unwrap().value {
+            parent.as_mut().unwrap().insert(value);
+        }
     }
 
     // Search for a value in the BST
     fn search(&self, value: T) -> bool {
-        //TODO
-        true
+        let mut next = &self.root;
+
+        while next.is_some() {
+            let next_box = next.as_ref().unwrap();
+
+            if next_box.value == value {
+                return true;
+            } else if value < next_box.value {
+                next = &next_box.left;
+            } else {
+                next = &next_box.right;
+            }
+        }
+
+        false
     }
 }
 
@@ -66,7 +98,13 @@ where
 {
     // Insert a node into the tree
     fn insert(&mut self, value: T) {
-        //TODO
+        if value < self.value {
+            let new_node = Box::new(TreeNode::<T>::new(value));
+            self.left = Some(new_node);
+        } else if value > self.value {
+            let new_node = Box::new(TreeNode::<T>::new(value));
+            self.right = Some(new_node);
+        }
     }
 }
 

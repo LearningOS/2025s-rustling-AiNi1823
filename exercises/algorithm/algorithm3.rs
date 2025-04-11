@@ -3,11 +3,22 @@
 	This problem requires you to implement a sorting algorithm
 	you can use bubble sorting, insertion sorting, heap sorting, etc.
 */
-// I AM NOT DONE
 
-fn sort<T>(array: &mut [T]){
-	//TODO
+fn sort<T: Ord + Copy>(array: &mut [T]) {
+    let mut checked = 0usize;
+    while checked < array.len() - 1 {
+        if array[checked] > array[checked + 1] {
+            (array[checked], array[checked + 1]) = (array[checked + 1], array[checked]);
+            if checked > 0 {
+                checked -= 1;
+                continue;
+            }
+        }
+
+        checked += 1;
+    }
 }
+
 #[cfg(test)]
 mod tests {
     use super::*;
